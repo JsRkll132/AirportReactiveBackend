@@ -1,4 +1,4 @@
-package com.airport.airportPro.auth.User;
+package com.airport.airportPro.auth.entity.User;
 
 public class UserService {
 

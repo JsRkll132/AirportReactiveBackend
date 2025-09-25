@@ -1,5 +1,8 @@
-package com.airport.airportPro.auth.User;
+package com.airport.airportPro.auth.entity.User;
 
-public class UserRepository {
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
 
-}
+public interface UserRepository extends R2dbcRepository<User,Long>{
+
+    
+}  
