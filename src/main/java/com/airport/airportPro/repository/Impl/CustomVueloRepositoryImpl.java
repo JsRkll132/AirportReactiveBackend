@@ -1,5 +1,7 @@
 package com.airport.airportPro.repository.Impl;
 
+import java.time.LocalTime;
+
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +16,7 @@ import reactor.core.publisher.Flux;
 public class CustomVueloRepositoryImpl implements CustomVueloRepository{
 
     private final DatabaseClient databaseClient;
-
+/* */
     @Override
     public Flux<Vuelo> getAllByPassengerId(Long Id){
         return databaseClient.sql("SELECT v.id , v.numerovuelo,v.aeropuertosalidaid ,\n" + //
@@ -27,13 +29,13 @@ public class CustomVueloRepositoryImpl implements CustomVueloRepository{
                         row.get("numerovuelo", String.class),
                         row.get("aeropuertosalidaid", Long.class),
                         row.get("aeropuertodestinoid", Long.class),
-                        row.get("horasalida", String.class),
-                        row.get("horallegada", String.class)
+                        row.get("horasalida", LocalTime.class),
+                        row.get("horallegada",LocalTime.class)
                 ))
                 .all()
                 .onErrorResume(e -> Flux.empty());  // `all()` para devolver todos los pasajeros
     }
-
+ 
     @Override
     public Flux<Vuelo> getAllByAirportId(Long Id){
         return databaseClient.sql("SELECT v.id AS vuelo_id, " +
@@ -57,8 +59,8 @@ public class CustomVueloRepositoryImpl implements CustomVueloRepository{
                         row.get("numeroVuelo", String.class),
                         row.get("aeropuerto_salidaid", Long.class),
                         row.get("aeropuerto_destinoid", Long.class),
-                        row.get("horaSalida", String.class),
-                        row.get("horaLlegada", String.class),
+                        row.get("horaSalida", LocalTime.class),
+                        row.get("horaLlegada", LocalTime.class),
                         row.get("aeropuerto_salida", String.class),
                         row.get("ubicacion_salida", String.class),
                         row.get("aeropuerto_destino", String.class),
@@ -67,5 +69,5 @@ public class CustomVueloRepositoryImpl implements CustomVueloRepository{
                 ))
                 .all()
                 .onErrorResume(e -> { e.printStackTrace(); return Flux.empty() ;} );  // `all()` para devolver todos los pasajeros
-    }
+    } 
 }

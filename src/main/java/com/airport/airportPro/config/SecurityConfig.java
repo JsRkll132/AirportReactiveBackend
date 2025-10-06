@@ -22,9 +22,9 @@ public class SecurityConfig {
 		http
 			.authorizeExchange(exchanges -> exchanges
                 .pathMatchers("/auth/**").permitAll()
-			    .anyExchange().authenticated()
+			    .anyExchange().permitAll()
 			)
-			.httpBasic(httpBasic -> httpBasic.disable())
+            .httpBasic(httpbasic -> httpbasic.disable())
 			.formLogin(formLogin -> formLogin.disable())
             .csrf(csrf -> csrf.disable());
 		return http.build();

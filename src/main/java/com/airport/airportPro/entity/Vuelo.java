@@ -1,7 +1,12 @@
 package com.airport.airportPro.entity;
 
+import java.time.LocalTime;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,33 +14,46 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor      
 @AllArgsConstructor
-@Table("Vuelos")
+@Table("vuelo")
 public class Vuelo {
 
-    @Id
-    private Long id;
-    private String numeroVuelo;
-    private Long aeropuertoSalidaId;
-    private Long aeropuertoDestinoId;
-    private String horaSalida;
-    private String horaLlegada;
-    private String aeropuertoSalida;
-    private String ubicacionSalida;
-    private String aeropuertoDestino;
-    private String ubicacionDestino;
+        @Id
+        @Column("id")
+        private Long id;
 
+        @Column("numerovuelo")
+        private String numerovuelo;
 
+        @Column("aeropuertosalidaid")
+        private Long aeropuertosalidaId;
 
-    public Vuelo(Long id, String numeroVuelo, Long aeropuertoSalidaId, Long aeropuertoDestinoId, 
-                 String horaSalida, String horaLlegada) {
+        @Column("aeropuertodestinoid")
+        private Long aeropuertodestinoId;
+
+        @Column("horasalida")
+        private LocalTime horasalida;   // ideal: LocalTime/LocalDateTime
+
+        @Column("horallegada")
+        private LocalTime horallegada;  // ideal: LocalTime/LocalDateTime
+
+        @Transient private String aeropuertoSalida;
+        @Transient private String ubicacionSalida;
+        @Transient private String aeropuertoDestino;
+        @Transient private String ubicacionDestino;        
+  
+     public Vuelo(Long id,
+                 String numerovuelo,
+                 Long aeropuertosalidaId,
+                 Long aeropuertodestinoId,
+                 LocalTime horasalida,
+                 LocalTime horallegada) {
         this.id = id;
-        this.numeroVuelo = numeroVuelo;
-        this.aeropuertoSalidaId = aeropuertoSalidaId;
-        this.aeropuertoDestinoId = aeropuertoDestinoId;
-        this.horaSalida = horaSalida;
-        this.horaLlegada = horaLlegada;
-    }
-        
+        this.numerovuelo = numerovuelo;
+        this.aeropuertosalidaId = aeropuertosalidaId;
+        this.aeropuertodestinoId = aeropuertodestinoId;
+        this.horasalida = horasalida;
+        this.horallegada = horallegada;
+    }       
   
     
 }

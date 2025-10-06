@@ -26,6 +26,7 @@ public class VueloServiceImpl implements VueloService {
         
         return customVueloRepository.getAllByPassengerId(Id);
     }
+    
     @Override
     public Flux<Vuelo> getAllByAirportId(Long Id) {
         return customVueloRepository.getAllByAirportId(Id);
