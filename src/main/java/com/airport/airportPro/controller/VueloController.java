@@ -21,8 +21,8 @@ public class VueloController {
     private final VueloService vueloService;
 
     @GetMapping({"", "/"})
-    public ResponseEntity<String> defaultPage(){
-        return ResponseEntity.notFound().build();
+    public Mono<ResponseEntity<String>> defaultPage(){
+        return Mono.just(ResponseEntity.notFound().build()) ;
     }
 
 
