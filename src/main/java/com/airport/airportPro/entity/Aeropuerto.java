@@ -1,6 +1,9 @@
 package com.airport.airportPro.entity;
 
+import java.time.LocalTime;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.AllArgsConstructor;
@@ -9,20 +12,41 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("Aeropuerto")
+@Table("aeropuerto")
 public class Aeropuerto {
 
     
     @Id
+    @Column("id")
     private Long id;
-    private String nombre;                  // Nombre del aeropuerto
-    private String ubicacion;               // Ciudad o región donde se encuentra
-    private String codigoiata;              // Código IATA único del aeropuerto (ej. "JFK")
-    private Integer numeroterminales;       // Número de terminales del aeropuerto
-    private Integer numeropistas;           // Número de pistas del aeropuerto
-    private String horarioapertura;         // Hora de apertura del aeropuerto (opcional)
-    private String horariocierre;           // Hora de cierre del aeropuerto (opcional)
-    private String estado;                  // Estado del aeropuerto (por ejemplo, "operativo", "en renovación", etc.)
-    private Double latitud;                 // Coordenada de latitud del aeropuerto (opcional)
-    private Double longitud;                // Coordenada de longitud del aeropuerto (opcional)
+
+    @Column("nombre") // Nombre del aeropuerto
+    private String nombre;
+
+    @Column("ubicacion")                  // Ciudad o región donde se encuentra
+    private String ubicacion;
+    
+    @Column("codigoiata")               // Código IATA único del aeropuerto (ej. "JFK")
+    private String codigoiata;
+    
+    @Column("numeroterminales")              // Número de terminales del aeropuerto
+    private Integer numeroterminales;
+    
+    @Column("numeropistas")       // Número de pistas del aeropuerto
+    private Integer numeropistas;
+    
+    @Column("horarioapertura")           // Hora de apertura del aeropuerto (opcional)
+    private LocalTime horarioapertura;
+    
+    @Column("horariocierre")         // Hora de cierre del aeropuerto (opcional)
+    private LocalTime horariocierre;
+    
+    @Column("estado")           // Estado del aeropuerto (por ejemplo, "operativo", "en renovación", etc.)
+    private String estado;
+    
+    @Column("latitud")                  // Coordenada de latitud del aeropuerto (opcional)
+    private Double latitud;
+    
+    @Column("longitud")                 // Coordenada de longitud del aeropuerto (opcional)
+    private Double longitud;                
 }

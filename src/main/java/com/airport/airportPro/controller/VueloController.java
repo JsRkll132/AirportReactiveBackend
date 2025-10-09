@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.airport.airportPro.entity.Pasajero;
 import com.airport.airportPro.entity.Vuelo;
 import com.airport.airportPro.services.VueloService;
 
