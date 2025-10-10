@@ -6,9 +6,11 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.airport.airportPro.auth.entity.User.MyUserDetails;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -32,18 +34,19 @@ public class JwtService {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey) );
     }
 
-    public String generateToken(final UserDetails user){
+    public String generateToken(final MyUserDetails user){
         return buildToken(user, jwtTokenExpiration,"access");
     }
-    public String generateRefreshToken(final UserDetails user){
+    public String generateRefreshToken(final MyUserDetails user){
         return buildToken(user, jwtRefreshTokenExpiration,"refresh");
     }
 
-    private String buildToken(final UserDetails user, final long time, final String typetoken){
+    private String buildToken(final MyUserDetails user, final long time, final String typetoken){
             
             return Jwts.builder()
                     .subject(user.getUsername())
-                    .claims(Map.of("name",user.getUsername(),"email",user.getAuthorities()))
+                    .claims(Map.of("username",user.getUsername(),"email",user.getEmail(),
+                    "roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()))
                     .claim("typ", typetoken)
                     .issuedAt(new Date(System.currentTimeMillis()))
                     .expiration(new Date(System.currentTimeMillis() + time))
