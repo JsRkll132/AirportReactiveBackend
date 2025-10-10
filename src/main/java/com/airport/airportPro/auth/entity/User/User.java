@@ -17,16 +17,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table("user")
-public class User implements UserDetails{
+public class User {
     @Id
     private Long id;
     private String username;
     private String password;
     private String email;
     
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
-    }
+ 
 }
