@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.airport.airportPro.auth.entity.Role.RoleRepository;
-
+import com.airport.airportPro.auth.entity.User.MyUserDetails;
 import com.airport.airportPro.auth.entity.User.UserRepository;
 import com.airport.airportPro.auth.entity.User.UserService;
 
@@ -29,10 +29,8 @@ public class UserServiceImpl implements UserService{
         roleRepository.findRoleNamesByUserId(u.getId())
           .map(SimpleGrantedAuthority::new)
           .collectList()
-          .map(auths -> User.withUsername(u.getUsername())
-            .password(u.getPassword())
-            .authorities(auths)
-            .build()
+          .map(auths -> new MyUserDetails(u.getUsername(), u.getPassword(), u.getEmail(), 
+          true, true, true, true, auths)
           )
       );
   }
