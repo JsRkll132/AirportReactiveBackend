@@ -6,12 +6,13 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.airport.airportPro.auth.entity.User.MyUserDetails;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -39,6 +40,15 @@ public class JwtService {
     }
     public String generateRefreshToken(final MyUserDetails user){
         return buildToken(user, jwtRefreshTokenExpiration,"refresh");
+    }
+
+    public Claims getJwtTokenClaims(String token) { 
+        return  Jwts.parser().verifyWith(getSingInKey()).build().parseSignedClaims(token).getPayload();
+    }   
+    
+    public boolean IsTokenValid(final String token, final MyUserDetails user){
+        final String username  = getJwtTokenClaims(token).getSubject();
+        return username.equals(user.getUsername()) || username.equals(user.getEmail());
     }
 
     private String buildToken(final MyUserDetails user, final long time, final String typetoken){
