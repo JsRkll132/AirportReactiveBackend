@@ -1,8 +1,6 @@
 package com.airport.airportPro.auth.entity.User.Impl;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     @Override
-  public Mono<UserDetails> findByUsername(String username) {
+  public Mono<MyUserDetails> findByUsername(String username) {
     return userRepository.findByUsername(username)
       .switchIfEmpty(Mono.error(new UsernameNotFoundException("No existe")))
       .flatMap(u ->

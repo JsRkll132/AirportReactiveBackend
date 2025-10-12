@@ -7,7 +7,9 @@ import org.springframework.security.core.userdetails.User;
  
 public class MyUserDetails  extends User{
     private String email;
-    public MyUserDetails(String username, String password , String email, boolean enabled, boolean accountNonExpired,
+    public MyUserDetails(
+            String username, String password , String email,
+            boolean enabled, boolean accountNonExpired,
             boolean credentialsNonExpired, boolean accountNonLocked,
             Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
@@ -17,6 +19,4 @@ public class MyUserDetails  extends User{
         return this.email;
     }
  
-
-
 }

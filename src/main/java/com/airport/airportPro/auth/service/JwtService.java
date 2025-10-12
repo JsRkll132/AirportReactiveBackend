@@ -51,7 +51,7 @@ public class JwtService {
         return username.equals(user.getUsername()) || username.equals(user.getEmail());
     }
 
-    private String buildToken(final MyUserDetails user, final long time, final String typetoken){
+    public String buildToken(final MyUserDetails user, final long time, final String typetoken){
             
             return Jwts.builder()
                     .subject(user.getUsername())
