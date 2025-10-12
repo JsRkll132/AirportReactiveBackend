@@ -1,4 +1,4 @@
-package com.airport.airportPro.auth.entity.Role;
+package com.airport.airportPro.auth.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;

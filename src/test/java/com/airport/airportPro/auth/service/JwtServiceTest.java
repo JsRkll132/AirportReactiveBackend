@@ -9,8 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.airport.airportPro.auth.entity.Role.RoleService;
-import com.airport.airportPro.auth.entity.User.MyUserDetails;
+import com.airport.airportPro.auth.entity.MyUserDetails;
 
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -23,7 +22,7 @@ public class JwtServiceTest {
     // Inyectamos las dependencias en JwtService (que usa RoleService)
     @InjectMocks
     private JwtService jwtService;
-    
+
     @Test
     void testIsTokenValid() {
 

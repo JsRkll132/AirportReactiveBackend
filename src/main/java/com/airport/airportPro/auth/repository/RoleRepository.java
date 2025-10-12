@@ -1,9 +1,10 @@
-package com.airport.airportPro.auth.entity.Role;
+package com.airport.airportPro.auth.repository;
 
 
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 
+import com.airport.airportPro.auth.entity.Role;
 
 import reactor.core.publisher.Flux;
 

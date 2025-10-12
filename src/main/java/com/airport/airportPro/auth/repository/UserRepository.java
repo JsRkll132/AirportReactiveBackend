@@ -1,6 +1,8 @@
-package com.airport.airportPro.auth.entity.User;
+package com.airport.airportPro.auth.repository;
 
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
+
+import com.airport.airportPro.auth.entity.User;
 
 import reactor.core.publisher.Mono;
 

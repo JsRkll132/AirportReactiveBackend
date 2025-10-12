@@ -1,13 +1,13 @@
-package com.airport.airportPro.auth.entity.User.Impl;
+package com.airport.airportPro.auth.service.Impl;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.airport.airportPro.auth.entity.Role.RoleRepository;
-import com.airport.airportPro.auth.entity.User.MyUserDetails;
-import com.airport.airportPro.auth.entity.User.UserRepository;
-import com.airport.airportPro.auth.entity.User.UserService;
+import com.airport.airportPro.auth.entity.MyUserDetails;
+import com.airport.airportPro.auth.repository.RoleRepository;
+import com.airport.airportPro.auth.repository.UserRepository;
+import com.airport.airportPro.auth.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

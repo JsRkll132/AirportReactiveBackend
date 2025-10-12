@@ -1,4 +1,4 @@
-package com.airport.airportPro.auth.entity.User;
+package com.airport.airportPro.auth.entity;
 
 import java.util.Collection;
 

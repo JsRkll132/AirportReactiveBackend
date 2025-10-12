@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airport.airportPro.auth.controller.DTO.RoleByUserID;
-import com.airport.airportPro.auth.entity.Role.RoleService;
-import com.airport.airportPro.auth.entity.Role.DAO.RoleByUserIdDAO;
+import com.airport.airportPro.auth.service.RoleService;
 
 import lombok.AllArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,6 +52,7 @@ public class AuthController {
 
     @GetMapping("/getRolesByUser/{id}")
     public Mono<List<RoleByUserID>> findRoleNamesByUserId(@PathVariable Long id) {
+        roleService.findRoleNamesByUserId(id).subscribe(rolename -> System.out.println(rolename));
         return roleService.findRoleNamesByUserId(id)
             .map(name -> new RoleByUserID(name))
             .collectList(); // << devuelve [ { "rolename": "ROLE_ADMIN" }, { "rolename": "ROLE_USER" } ]
