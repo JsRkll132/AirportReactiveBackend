@@ -10,13 +10,19 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.context.ServerSecurityContextRepository;
+
+import lombok.RequiredArgsConstructor;
 
  
 @Configuration
 @EnableWebFluxSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final ServerSecurityContextRepository securityContextRepository;
     @Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		http
@@ -24,6 +30,7 @@ public class SecurityConfig {
                 .pathMatchers("/auth/**","/api/**").permitAll()
 			    .anyExchange().authenticated()
 			)
+            .securityContextRepository(securityContextRepository)
             .httpBasic(httpbasic -> httpbasic.disable())
 			.formLogin(formLogin -> formLogin.disable())
             .csrf(csrf -> csrf.disable());

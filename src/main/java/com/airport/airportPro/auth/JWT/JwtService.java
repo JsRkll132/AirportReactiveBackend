@@ -1,4 +1,4 @@
-package com.airport.airportPro.auth.service;
+package com.airport.airportPro.auth.JWT;
 
 import java.util.Date;
 import java.util.Map;
@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtService {
 
 
@@ -35,7 +36,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey) );
     }
 
-    public String generateToken(final MyUserDetails user){
+    public String generateAccessToken(final MyUserDetails user){
         return buildToken(user, jwtTokenExpiration,"access");
     }
     public String generateRefreshToken(final MyUserDetails user){
@@ -47,8 +48,15 @@ public class JwtService {
     }   
     
     public boolean IsTokenValid(final String token, final MyUserDetails user){
-        final String username  = getJwtTokenClaims(token).getSubject();
-        return username.equals(user.getUsername()) || username.equals(user.getEmail());
+
+        try {
+            final String username  = getJwtTokenClaims(token).getSubject();
+            return username.equals(user.getUsername()) || username.equals(user.getEmail());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info("some error in token validation");
+        }
+        return false;
     }
 
     public String buildToken(final MyUserDetails user, final long time, final String typetoken){
