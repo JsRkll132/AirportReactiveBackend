@@ -22,7 +22,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ServerSecurityContextRepository securityContextRepository;
+
+   // @Bean
+   // private ServerSecurityContextRepository securityContextRepository(){};
+
+
     @Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		http
@@ -30,7 +34,7 @@ public class SecurityConfig {
                 .pathMatchers("/auth/**","/api/**").permitAll()
 			    .anyExchange().authenticated()
 			)
-            .securityContextRepository(securityContextRepository)
+           // .securityContextRepository(securityContextRepository)
             .httpBasic(httpbasic -> httpbasic.disable())
 			.formLogin(formLogin -> formLogin.disable())
             .csrf(csrf -> csrf.disable());
@@ -41,15 +45,15 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
     
-    @Bean
-    public MapReactiveUserDetailsService userDetailsService (PasswordEncoder passwordEncoder){
-        UserDetails user = User.builder()
-                            .username("user")
-                            .password(passwordEncoder.encode("user"))
-                            .roles("USER")
-                            .build();
-        return new MapReactiveUserDetailsService(user);
-    }
+    // @Bean
+    // public MapReactiveUserDetailsService userDetailsService (PasswordEncoder passwordEncoder){
+    //     UserDetails user = User.builder()
+    //                         .username("user")
+    //                         .password(passwordEncoder.encode("user"))
+    //                         .roles("USER")
+    //                         .build();
+    //     return new MapReactiveUserDetailsService(user);
+    // }
 
 
 }

@@ -60,7 +60,7 @@ public class JwtService {
     }
 
     public String buildToken(final MyUserDetails user, final long time, final String typetoken){
-            
+            log.info(getSingInKey().toString());
             return Jwts.builder()
                     .subject(user.getUsername())
                     .claims(Map.of("username",user.getUsername(),"email",user.getEmail(),

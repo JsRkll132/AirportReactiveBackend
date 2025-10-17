@@ -7,8 +7,11 @@ import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.airport.airportPro.auth.controller.DTO.LoginDTO;
+import com.airport.airportPro.auth.controller.DTO.RegisterDTO;
 import com.airport.airportPro.auth.controller.DTO.RoleByUserID;
 import com.airport.airportPro.auth.service.RoleService;
+import com.airport.airportPro.auth.service.UserService;
 
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -26,23 +29,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @AllArgsConstructor
 public class AuthController {
     private final RoleService roleService;
+    private final UserService userService;
     @GetMapping("/")
     public Mono<ResponseEntity<String>> AuthPrincipalPage (AuthenticatedPrincipal principal) {
     return Mono.just(ResponseEntity.ok("Authenticated as: " + principal.getName()));
 }
 
     @PostMapping("/login")
-    public String postMethodName(@RequestBody String entity) {
-        //TODO: process POST request
-        
-        return entity;
+    public Mono<String> userLogin(@RequestBody LoginDTO loginDTO) {   
+        return userService.userLongIn(loginDTO);
     }
     
     @PostMapping("/register")
-    public String postMethodName2(@RequestBody String entity) {
-        //TODO: process POST request
-        
-        return entity;
+    public Mono<String> userRegister(@RequestBody RegisterDTO registerDTO) {        
+        return userService.userRegister(registerDTO);
     }
 
     @GetMapping("/logout")
