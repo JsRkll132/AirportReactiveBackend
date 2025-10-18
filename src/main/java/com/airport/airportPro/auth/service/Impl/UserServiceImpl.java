@@ -1,11 +1,8 @@
 package com.airport.airportPro.auth.service.Impl;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +13,7 @@ import com.airport.airportPro.auth.controller.DTO.RegisterDTO;
 import com.airport.airportPro.auth.entity.MyUserDetails;
 import com.airport.airportPro.auth.repository.RoleRepository;
 import com.airport.airportPro.auth.repository.UserRepository;
+import com.airport.airportPro.auth.repository.UserRoleRepository;
 import com.airport.airportPro.auth.service.UserService;
 import com.airport.airportPro.handler.CustomExceptions.BadRegisterException;
 
@@ -29,6 +27,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     
@@ -50,7 +49,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public Mono<String> userLongIn(LoginDTO loginDTO) {
         return userRepository.findByUsernameOrEmail(loginDTO.username(), loginDTO.username()).next()
-                              .filter(user -> loginDTO.password().equals(user.getPassword()))
+                              .filter(user -> passwordEncoder.matches(loginDTO.password(), user.getPassword()) )
                               .switchIfEmpty(Mono.error(new Throwable("Error")))
                               .flatMap(u -> 
                                         roleRepository.findRoleNamesByUserId(u.getId())
@@ -83,18 +82,23 @@ public class UserServiceImpl implements UserService{
         Mono<Boolean> userExist = userRepository.findByUsernameOrEmail(myUserCreated.getUsername(), myUserCreated.getEmail()).hasElements();
 
         return userExist.flatMap(exists -> {
-            if (exists) {
-                // Si el usuario ya existe, lanzamos una BadRegisterException
-                return Mono.error(new BadRegisterException("Error in user creation (already exists)", "USER EXISTS", HttpStatus.CONFLICT));
-            }
-            // Si no existe, guardamos al nuevo usuario
-            return userRepository.save(myUserCreated)
-                    .map(user -> "User created: " + user.getUsername());
-        })
-        .onErrorResume(BadRegisterException.class, ex -> {
-            // Captura la excepción BadRegisterException y maneja el flujo
-            // Devolvemos el error de forma controlada
-            return Mono.error(new BadRegisterException(ex.getMessage(), ex.getErrorCode(), HttpStatus.CONFLICT));
+                              if (exists) {
+                                  // Si el usuario ya existe, lanzamos una BadRegisterException
+                                  return Mono.error(new BadRegisterException("Error in user creation (already exists)", "USER_EXIST_CONFLICT" , HttpStatus.CONFLICT));
+                              }
+                              // Si no existe, guardamos al nuevo usuario
+                              return userRepository.save(myUserCreated)
+                                      .flatMap(user -> {
+                                        return roleRepository.findById(2L)
+                                                    .flatMap(
+                                                      role -> {
+                                                          return userRoleRepository.saveUserRole(user.getId(), role.getId())
+                                                                    .then(Mono.just("User created with roles: " + user.getUsername()));
+                                                      }
+                                                    );
+                                      });
+                                      
+                                      
         });
     }      
 
