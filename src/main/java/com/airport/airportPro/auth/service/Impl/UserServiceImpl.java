@@ -16,6 +16,7 @@ import com.airport.airportPro.auth.repository.UserRepository;
 import com.airport.airportPro.auth.repository.UserRoleRepository;
 import com.airport.airportPro.auth.service.UserService;
 import com.airport.airportPro.handler.CustomExceptions.BadRegisterException;
+import com.airport.airportPro.handler.CustomExceptions.CustomException;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService{
                                           )
                               )
                               .flatMap(u -> Mono.just(jwtService.generateAccessToken(u)) )
-                              .onErrorResume(e -> Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Error in login")))
+                              .onErrorResume(e -> Mono.error(new CustomException("Error in login", "UNAUTHORIZED", HttpStatus.UNAUTHORIZED)  ))
                     
                               ;
                     

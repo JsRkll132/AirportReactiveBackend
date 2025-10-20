@@ -11,11 +11,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.airport.airportPro.handler.CustomExceptions.BadRegisterException;
+import com.airport.airportPro.handler.CustomExceptions.CustomException;
 import com.airport.airportPro.handler.ErrorDTO.ErrorResponse;
 
 @RestControllerAdvice
 public class ControllerAdvice {
 
+
+
+
+    @ExceptionHandler(value = CustomException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex,ServerWebExchange serverWebExchange ) {
+        ErrorResponse error = new ErrorResponse();
+        error.setErrorCode(ex.getErrorCode());  
+        error.setMessage(ex.getMessage());  
+        error.setStatus(ex.getStatus().value());  
+        error.setTimestamp(Instant.now());
+        error.setPath(serverWebExchange.getRequest().getURI().toString());
+
+        return new ResponseEntity<>(error,ex.getStatus()); 
+    }
 
 
     @ExceptionHandler(value = BadRegisterException.class)

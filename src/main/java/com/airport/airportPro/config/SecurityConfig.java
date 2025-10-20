@@ -4,15 +4,13 @@ package com.airport.airportPro.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.context.ServerSecurityContextRepository;
+
+import com.airport.airportPro.auth.JWT.JwtFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,21 +20,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-
-   // @Bean
-   // private ServerSecurityContextRepository securityContextRepository(){};
-
-
+ 
+    private final SecurityContextRepository securityContextRepository;
     @Bean
-	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, JwtFilter jwtFilter) {
 		http
 			.authorizeExchange(exchanges -> exchanges
                 .pathMatchers("/auth/**","/api/**").permitAll()
 			    .anyExchange().authenticated()
 			)
-           // .securityContextRepository(securityContextRepository)
+            .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)
+            .securityContextRepository(securityContextRepository)
             .httpBasic(httpbasic -> httpbasic.disable())
 			.formLogin(formLogin -> formLogin.disable())
+            .logout(logout -> logout.disable())
             .csrf(csrf -> csrf.disable());
 		return http.build();
 	}
