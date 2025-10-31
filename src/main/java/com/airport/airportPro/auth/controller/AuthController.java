@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.airport.airportPro.auth.controller.DTO.LoginDTO;
 import com.airport.airportPro.auth.controller.DTO.RegisterDTO;
 import com.airport.airportPro.auth.controller.DTO.RoleByUserID;
+import com.airport.airportPro.auth.controller.DTO.TokenDTO;
 import com.airport.airportPro.auth.service.RoleService;
 import com.airport.airportPro.auth.service.UserService;
 
@@ -36,7 +37,7 @@ public class AuthController {
 }
 
     @PostMapping("/login")
-    public Mono<String> userLogin(@RequestBody LoginDTO loginDTO) {   
+    public Mono<TokenDTO> userLogin(@RequestBody LoginDTO loginDTO) {   
         return userService.userLongIn(loginDTO);
     }
     

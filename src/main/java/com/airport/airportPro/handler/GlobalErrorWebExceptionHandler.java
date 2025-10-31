@@ -20,6 +20,8 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import com.airport.airportPro.handler.CustomExceptions.CustomException;
+
 import reactor.core.publisher.Mono;
 
 
@@ -47,11 +49,15 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
 
     private Mono<ServerResponse> renderErrorResponse(
        ServerRequest request) {
-
+      var error = getError(request);
+       
        Map<String, Object> errorPropertiesMap = getErrorAttributes(request, 
          ErrorAttributeOptions.defaults());
+      HttpStatus status = (error instanceof  CustomException)
+            ? ((CustomException) error).getStatus()
+            : HttpStatus.BAD_REQUEST;
 
-       return ServerResponse.status(HttpStatus.BAD_REQUEST)
+       return ServerResponse.status(status)
          .contentType(MediaType.APPLICATION_JSON)
          .body(BodyInserters.fromValue(errorPropertiesMap));
     }

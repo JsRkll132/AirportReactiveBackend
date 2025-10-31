@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.crypto.SecretKey;
+import javax.sound.midi.SysexMessage;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,15 +51,17 @@ public class JwtService {
     public boolean IsTokenValid(final String token, final MyUserDetails user){
 
         try {
-            final String username  = getJwtTokenClaims(token).getSubject();
-            return username.equals(user.getUsername()) || username.equals(user.getEmail());
+            final Claims claims = getJwtTokenClaims(token);
+            final String username  =  claims.getSubject();
+            return username.equals(user.getUsername()) || username.equals(user.getEmail())
+                    &&  (claims.getExpiration().getTime() > System.currentTimeMillis() );
         } catch (Exception e) {
             e.printStackTrace();
             log.info("some error in token validation");
         }
         return false;
     }
-
+ 
     public String buildToken(final MyUserDetails user, final long time, final String typetoken){
             log.info(getSingInKey().toString());
             return Jwts.builder()

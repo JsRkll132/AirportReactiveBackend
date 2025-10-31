@@ -10,12 +10,12 @@ import org.springframework.web.server.ResponseStatusException;
 import com.airport.airportPro.auth.JWT.JwtService;
 import com.airport.airportPro.auth.controller.DTO.LoginDTO;
 import com.airport.airportPro.auth.controller.DTO.RegisterDTO;
+import com.airport.airportPro.auth.controller.DTO.TokenDTO;
 import com.airport.airportPro.auth.entity.MyUserDetails;
 import com.airport.airportPro.auth.repository.RoleRepository;
 import com.airport.airportPro.auth.repository.UserRepository;
 import com.airport.airportPro.auth.repository.UserRoleRepository;
 import com.airport.airportPro.auth.service.UserService;
-import com.airport.airportPro.handler.CustomExceptions.BadRegisterException;
 import com.airport.airportPro.handler.CustomExceptions.CustomException;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService{
  
 
     @Override
-    public Mono<String> userLongIn(LoginDTO loginDTO) {
+    public Mono<TokenDTO> userLongIn(LoginDTO loginDTO) {
         return userRepository.findByUsernameOrEmail(loginDTO.username(), loginDTO.username()).next()
                               .filter(user -> passwordEncoder.matches(loginDTO.password(), user.getPassword()) )
                               .switchIfEmpty(Mono.error(new Throwable("Error")))
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService{
                                       ,true,true,true,auths_)
                                           )
                               )
-                              .flatMap(u -> Mono.just(jwtService.generateAccessToken(u)) )
+                              .flatMap(u -> Mono.just(new TokenDTO(jwtService.generateAccessToken(u)) ))
                               .onErrorResume(e -> Mono.error(new CustomException("Error in login", "UNAUTHORIZED", HttpStatus.UNAUTHORIZED)  ))
                     
                               ;
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService{
         return userExist.flatMap(exists -> {
                               if (exists) {
                                   // Si el usuario ya existe, lanzamos una BadRegisterException
-                                  return Mono.error(new BadRegisterException("Error in user creation (already exists)", "USER_EXIST_CONFLICT" , HttpStatus.CONFLICT));
+                                  return Mono.error(new CustomException("Error in user creation (already exists)", "USER_EXIST_CONFLICT" , HttpStatus.CONFLICT));
                               }
                               // Si no existe, guardamos al nuevo usuario
                               return userRepository.save(myUserCreated)

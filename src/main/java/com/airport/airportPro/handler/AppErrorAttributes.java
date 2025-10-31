@@ -1,8 +1,5 @@
 package com.airport.airportPro.handler;
- 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
+
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
@@ -37,12 +34,13 @@ public class AppErrorAttributes extends DefaultErrorAttributes {
         var errorList = new ArrayList<Map<String, Object>>();
 
         if (error instanceof CustomException ) {
-            status = ((CustomException) error).getStatus();
+            this.setStatus( ((CustomException) error).getStatus())  ;
             var errorMap = new LinkedHashMap<String, Object>();
             errorMap.put("code", ((CustomException) error).getErrorCode());
             errorMap.put("message", error.getMessage());
             errorList.add(errorMap);
         }  
+ 
         else {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             var message = error.getMessage();
