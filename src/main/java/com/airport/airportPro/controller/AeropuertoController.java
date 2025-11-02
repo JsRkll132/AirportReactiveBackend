@@ -2,6 +2,7 @@ package com.airport.airportPro.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class AeropuertoController {
     }
 
     @GetMapping("/getById/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Mono<ResponseEntity<Aeropuerto>> getById(@PathVariable Long id) {
         return aeropuertoService.getById(id)
             .map(airport -> ResponseEntity.ok(airport))  // Si el aeropuerto existe, devolver 200 OK

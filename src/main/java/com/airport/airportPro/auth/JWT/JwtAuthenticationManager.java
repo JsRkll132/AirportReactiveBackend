@@ -35,10 +35,8 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager{
                                             claims.getSubject() , 
                                             null,
                                             Stream.of(claims.get("roles"))
-                                                    .map(role -> (List<Map<String,String>>) role)
-                                                    .flatMap(role -> role.stream()
-                                                                        .map(r -> r.get("authority"))
-                                                                        .map(SimpleGrantedAuthority::new))
+                                                    .flatMap(roles ->  ((List<String>) roles).stream())
+                                                    .map(SimpleGrantedAuthority::new)
                                                     .collect(Collectors.toList()))
                     );              
     }
