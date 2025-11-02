@@ -33,4 +33,5 @@ build/
 .vscode/
 ### enviroment###
 .env
+*.pem
 docker-compose.yml
