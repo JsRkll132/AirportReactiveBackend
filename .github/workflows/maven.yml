@@ -29,10 +29,6 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn clean install -DskipTests
-  public-images:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
     - name: Build image docker
       run: docker buildx build ./ -t ${{ secrets.DOCKER_HUB_UNAME }}/spring-airport-apprepo:latest
     - name: Push to dockerhub
